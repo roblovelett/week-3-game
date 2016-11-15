@@ -28,214 +28,149 @@
     <footer></footer>
     <script type="text/javascript">
         $(document).ready(function() {
-        //create game intro = true
-            //if game intro = true
-                //create start screen text object
-                    //header_text: Hangman
-                    //subtitle_text: Internet Cats
-                    //intro_text: Press Any Key to Get Started!
-                //display o_start_screen.header_text
-                //display o_start_screen.subtitle_text
-                //display o_start_screen.intro_text
-                    //if user presses key
-                        //set game intro = false
-                        //set game = true
-            //if game = true
-                //remove div containing o_start_screen.intro_text
-                //create array of words to use = ["bla","bla bla"]
-                //create game text object
-                    //wins_text: Wins
-                    //current_word_text: Curent Word
-                    //guesses_remaining_text: Number of Guesses Remaining
-                    //guesses_text: Letters Already Guessed
-                //output game_text.wins_text
-                //output game_text.current_word_text
-                //output game_text.guesses_text
-                //create wins = 0;
-                //set round = true;
-                    //if round = true
-                        //create hidden word string .. needs array of words to use
-                            //take array of words to use
-                            //create random word string = ""
-                                //pick a random word from array of words to use
-                                //set random word string to be random word picked from array of words to use
-                            //create random word array .. needs random word string
-                                /*split random word string to an array of strings, each entry consisting of
-                                letters/spaces from random word string*/
-                            //create hidden word array .. needs random word array
-                                /*set each entry for hidden word array to be underscores & spaces from 
-                                random word array*/
-                            //create hidden word string by combining entries of hidden word array
-                        //output hidden word string "_ _ _  _ _ _"
-                        //create guesses = 0;
-                        //create guesses array = []
-                        //create guesses string;
-                        //create win = false;
-                        //create lose = false;
-                        //if user presses key
-                            //detect what char keypress is
-                                //if keypress A-Za-z0-9
-                                    //create key = char from keypress
-                                    //compare key to entries of random word array
-                                    //if key equals one or more of the entries in random word array
-                                        //set guess_match = true
-                                        //create matches_indexes array = []
-                                        //get the index's of matching entries and store them into matches_indexes array
-                                        //for the # of matches there are
-                                            /*replace the entries inside hidden word array to the matching char from
-                                            keypress in the indexes of matches_indexes array*/
-                                    //else if key does not equal any of the entries in random word array
-                                        //set guess_match = false
-                                        //guesses++
-                                        //if guesses > 8
-                                            //set lose = true
-                                            //round = false
-                                        //store char from keypress into guesses array
-                                        //update guesses string by combining entries of guesses array
-                                        //output guesses string
-                        //for the length of random word array
-                            /*check to see if all the entries of random word array matches the entries of hidden word 
-                            array*/
-                            //if true
-                                //set win = true
-                                //wins ++
-                                //output wins
-                                //round = false
-                    //if round = false
-                        //reset
-                        //create hidden word string = ""
-                        //clear random word array = []
-                        //clear hidden word array = []
-                        //round = true
-                        
-            //bank of words to use
-            var a_words = ["lil bub", "brother cream", "grumpy cat", "henri", "longcat", "limecat", "nyan cat", "happy cat", "business cat", "tacgnol", "ceiling cat"];
-            //instructions text
-            var o_instructions = {
-                title_text: "Hangman",
-                subtitle_text: "Internet Cats",
-                intro_text: "Press Any Key to Get Started!",
-                wins_text: "Wins",
-                current_word_text: "Current Word",
-                guesses_remaining_text: "Number of Guesses Remaining",
-                guesses_text: "Letters Already Guessed"
-            };
-            var i_wins = 0; //game start, initialize wins to 0
-            var i_guesses = 8; //game start, intialize user guesses to 8
-            var s_random_word = f_choose_random(a_words);
         
-            //function choose random word
-            function f_choose_random(word) {
-                return word[Math.floor(Math.random() * word.length)];
-            };
-
-            var a_word = s_random_word.split("");
-            var a_hidden_word = f_hidden_word_array(a_word);
+            var b_intro = true; //init game intro, start game @ intro screen
             
-            //create hidden word array "_ _ _   _ _ _"
-            function f_hidden_word_array (word_array) {
-                var hidden_word_array = [];
-                for (i = 0; i < word_array.length; i++) {
-                    if (word_array[i] === " ") {
-                        hidden_word_array[i] = "&nbsp;&nbsp;";
-                    } else {
-                        hidden_word_array[i] = "_ ";
-                    };    
+            if (b_intro){ //start intro
+
+                var game = false; //init game
+                var round = false; //init round
+                
+                var o_start_screen = { //create start screen object
+                    header_text: "Hangman", //set header text
+                    subtitle_text: "Internet Cat", //set subtitle text
+                    intro_text: "Press Any Key to Get Started!" //set intro text
                 };
-                return hidden_word_array;
-            };
-            
-            var a_hidden_word_game = []; //this array will update with every correct key press
-            //copy contents of a_hidden_word to a_hidden_word_game
-            for (i=0; i<a_hidden_word.length; i++) {
-                a_hidden_word_game[i] = a_hidden_word[i];
-            };
 
-            //insert onto page            
-            $("#header_title").html("<h1>" + o_instructions.title_text + "</h1>" + o_instructions.subtitle_text); //header title
-            $("#intro").html(o_instructions.intro_text); //press any key text
-
-            var b_intro = true; //init game intro screen
-            var b_hidden_word_init = true;
-            var s_hidden_word_init = ""; //init hidden word output _ _ _
-
-            if (b_hidden_word_init) {
-                s_hidden_word_init = f_hidden_word_init();
-                b_hidden_word_init = false; //set init hidden word output to false
-            };
+                $("#header_title").html( //display o_start_textcreen.header_text
+                    "<h1>" + o_start_screen.header_text + "</h1>" +
+                    "<h2>" + o_start_screen.subtitle_text + "</h2>"
+                );
+                
+                $("#intro").html(o_start_screen.intro_text); //display o_start_text.intro_text
+                $(document).on('keypress', function start_game () { //if user presses key
+                    b_intro = false; //set game intro = false
+                    game = true; //start game
+                    round = true; //start first round
+                });
+            }; //leave game intro
             
-            //output initial hidden word string
-            function f_hidden_word_init() {
-                var hidden_word_init = "";
-                for (i=0; i<a_word.length; i++) {
-                    hidden_word_init = hidden_word_init + a_hidden_word[i];
-                };
-                return hidden_word_init;
-            };
-            
-            if (b_intro) {
-                document.onkeypress = function f_no_intro() {
-                    $("#intro").remove(); //remove intro text
-                    $("#hidden_word").html(o_instructions.current_word_text + "<br />" + s_hidden_word_init);
-                    $("#guesses_remaining").html(o_instructions.guesses_remaining_text + "<br />" + i_guesses); //guesses text, number
-                    $("#guesses_letters").html(o_instructions.guesses_text + "<br />"); //guessed letter text, number
-                };
-                b_intro = false; //precursor to start game
-            };
+            if (game) { //start game
 
-            var s_hidden_word = "";
-            var a_guesses = [];
-            var b_no_intro_keypress = true;
-            
-            if (b_intro !== true) {
-                document.onkeypress = function f_game() {
-                    $("#hidden_word").html(o_instructions.current_word_text + "<br />" + s_hidden_word);
-                    var key = String.fromCharCode(event.keyCode); //get keycode
-                   
-                    if (/[a-zA-Z0-9]/.test(key)) { //if keycode in alphabet
-                        //if match
-                        for (i = 0; i < a_word.length; i++) {
-                            if (key === a_word[i]) {
-                                //replace underscore w/matching letter
-                                a_hidden_word_game[i] = key.toUpperCase();
-                            } else {
-                                i_guesses = i_guesses - 1; //take away a guess
-                                a_guesses.push(key.toUpperCase()); //add missed char to guesses array
+                $("#intro").remove(); //remove div containing o_start_screen.intro_text
+                    
+                var a_words = [ //create array of words
+                    "lil bub", "brother cream", "grumpy cat", "henri", "longcat", 
+                    "limecat", "nyan cat", "happy cat", "business cat", "tacgnol", "ceiling cat"];
+                var a_random_letters = []; //init random letters array
+                var a_hidden_letters = []; //init hidden letters array
+                var a_correct_letters = []; //init correct letters array
+                var a_guesses = []; //init guesses array
+                var a_matches = []; //init matches array
+                var b_round = true; //init round
+                var b_match = false; //init match
+                var b_win = false; //init win
+                var b_lose = false; //init lose
+                var b_turn = false; //init turn
+                var b_win = false; //init win
+                var i_turn = 0; //init turns counter
+                var i_wins = 0; //init wins counter
+                var i_losses = 0; //init losses counter
+                var i_rounds = 0; //init rounds counter
+                var i_incorrect = 0; //init incorrect counter
+                var i_guesses_remaining = 8;  //init # of guesses remaining
+                var o_game_text = { //create game text object
+                    wins: "Wins", //wins_text: Wins
+                    current_word: "Current Word",//current_word_text: Curent Word
+                    guesses_remaining: "Number of Guesses Remaining", //guesses_remaining_text: Number of Guesses Remaining
+                    guesses: "Already Guessed" }; //guesses_text: Letters Already Guessed
+                var s_random_word = ""; //init random word 
+                var s_hidden_word = ""; //init hidden word string
+                var s_correct_word = ""; //init correct word string
+                var s_guesses = ""; //init guesses string
+                var s_key = ""; //init s_keypress
+                
+                $("#wins").html(o_games_text.wins + "<br />"); //display wins text
+                $("#hidden_word").html(o_games_text.current_word + "<br />"); //display hidden word text
+                $("#guesses_remaining").html(o_games_text.guesses_remaining + "<br />"); //display guesses remaining text
+                $("#guesses_letters").html(o_games_text.guesses + "<br />"); //display letters guessed text
+                
+                if (b_round) { //start round of game 
+                    i_rounds ++; //add 1 to rounds counter
+                    s_random_word = a_words[Math.floor(Math.random() * a_words.length)]; //pick random word
+                    a_random_letters = s_random_word.split(""); //split s_random word's letters/spaces into entries for random_letters array
+                    a_correct_letters = a_random_letters; //set the correct letters array to have random letters array's entries
+
+                    if (i_turns < 1) { //if it is before the first turn
+                        for (i = 0; i < a_random_letters.length; i++) { //create hidden letters array
+                            if (a_random_letters[i] === " ") { //if the entry of a_random_letter is a space
+                                a_correct_letters[i] = "&nbsp;&nbsp;"; //create entry in correct letters array to be two spaces
+                                a_hidden_letters[i] = "&nbsp;&nbsp;"; //create entry in hidden letters array to be two spaces
+                            } else { //else if it is anything besides a space
+                                a_correct_letters[i] = a_random_letters[i].strtoupper + " "; //set entry in correct letters array is matching random letter entry, capitalize, & add space
+                                a_hidden_letters[i] = "_ "; //create entry in hidden letters array to be an underscore and space
                             };
                         };
                     };
-                };
-                //function f_hidden_word_array
-                function f_hidden_word() {
 
-                };
-            };                 
+                    s_correct_word = a_correct_letters.join(""); //join correct letters array
+                    s_hidden_word = a_hidden_letters.join(""); //join hidden letters array
+                    $("#hidden_word").append(s_hidden_word); //add & output hidden word
+                    
+                    $(document).on('keypress', function f_start_turn(b_turn) { //detect keypress
+                        s_key = String.fromCharCode(event.keyCode); //set key to be char code from keypress
+                        if (/[a-zA-Z0-9]/.test(s_key)) {//if keypress A-Za-z0-9
+                            b_turn = true; //start turn
+                            console.log(s_key);
+                        };
+                    });
+
+                    if (b_turn) { //start turn
+                        
+                        i_turns ++; //add 1 to turns counter
+
+                        for (i = 0; i < a_random_letters.length; i ++) { //check if keypress is match/incorrect
+                            if (s_key === a_random_letters[i]) { //if key equals one or more of the entries in random word array
+                                b_match = true; //set match to true
+                                a_hidden_letters[i] = s_key + " "; //replace matching letters to key, convert to uppercase    
+                            } else { //else if key does not equal any entries in random word array
+                                b_match = false; //set match to false
+                            };
+                        };
+
+                        if (!b_match) { //if incorrect guess
+                            i_incorrect ++; //add 1 to incorrect counter
+                            i_guesses_remaining = i_guesses_remaining - i_incorrect; //subtract 1 from # of guesses remaining                           
+                            a_guesses.push(s_key.strtoupper + " "); //store char from keypress into guesses array
+                            s_guesses = a_guesses.join(""); //join s_guesses string
+                            $("#guesses_remaining").append(i_guesses_remaining); //display # of guesses remaining
+                            $("#guesses_letters").append(s_guesses); //display guessed letters
+                        };
+                        b_turn = false; //end turn
+                    }; //end turn
+
+                    if (s_hidden_word === s_correct_word) { //win condition
+                        b_win = true; //user wins
+                        b_round = false; //end round
+                        i_wins ++; //add 1 to wins counter
+                        $("#wins").append(i_wins); //display wins number
+                    };
+
+                    if (i_incorrect >= 8) { //lose condition 
+                        b_lose = true; //user loses
+                        b_round = false; //user ends round
+                        i_losses ++; //add 1 to losses counter
+                    };
+
+                    if (!b_round) { //if round has ended, reset
+                        s_hidden_word = ""; //create hidden word string = ""
+                        a_random_word.splice(0,a_random_word.length); //clear random word
+                        a_hidden_word.splice(0,a_hidden_word.length); //clear hidden word
+                        b_round = true; //round = true
+                    };
+                };//end round
+            }; //end game
         });
-
-
-//function take hidden word array, output
-/*
-function f_hidden_word_output(hidden_word_array) {
-
-    var hidden_word_output = ""; //init output to be blank string
-    
-    for (i = 0; i < hidden_word_array.length; i++) {
-        hidden_word_output = hidden_word_output + hidden_word_array[i];
-    };
-
-    return hidden_word_output;             
-};
-*/
-/*var a_guessed_letters = []; //initialize guessed letters array
-if (i_wins > 0) { $("#wins").html(o_instructions.wins_text + "<br />" + i_wins); };
-*/
-/*
-} else {
-    document.onkeypress = function f_set_no_intro_true() {
-        b_no_intro = true;
-        $("#intro").remove(); //remove press any key div
-    };
-};*/
     </script>
   </body>
 </html>
