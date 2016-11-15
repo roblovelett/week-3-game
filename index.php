@@ -48,7 +48,7 @@
                 );
                 
                 $("#intro").html(o_start_screen.intro_text); //display o_start_text.intro_text
-                $(document).on('keypress', function start_game () { //if user presses key
+                $(document).on('keypress', function start_game(event) { //if user presses key
                     b_intro = false; //set game intro = false
                     game = true; //start game
                     round = true; //start first round
@@ -117,7 +117,7 @@
                     s_hidden_word = a_hidden_letters.join(""); //join hidden letters array
                     $("#hidden_word").append(s_hidden_word); //add & output hidden word
                     
-                    $(document).on('keypress', function f_start_turn(b_turn) { //detect keypress
+                    $(document).on('keypress', function f_start_turn(event) { //detect keypress
                         s_key = String.fromCharCode(event.keyCode); //set key to be char code from keypress
                         if (/[a-zA-Z0-9]/.test(s_key)) {//if keypress A-Za-z0-9
                             b_turn = true; //start turn
