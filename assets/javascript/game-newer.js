@@ -44,6 +44,7 @@ function f_intro() {
         o_game.intro = false;
         o_game.start = true; //start game
         $("#intro").remove(); //remove press any key text
+        f_init_game();
     });
 };
 
@@ -67,6 +68,7 @@ function f_init_game() {
             if (/[a-zA-Z0-9]/.test(keypress)) {//if keypress A-Za-z0-9
                 o_game.round = true; //start turn
                 o_game.keypress_guess = keypress.toUpperCase() + " ";
+                f_round();
             };
         });
     };
