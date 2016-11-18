@@ -13,12 +13,17 @@ var o_game = { //game object for elements that change throughout
     random_word: "", //generated random word from word bank
     random_letters: [], //array of letters &/ spaces generated from random word
     hidden_letters: [], //array of underscores &/ spaces that will change upon player guesses
+    guesses_letters: [], //init array of letters guessed 
     hidden_word: "", //string that will be updated depending on player guesses, compare to random word
+    correct_word: "", //init string correct word
     keypress_guess: "", //generated from keypress
     guesses_remaining: this.max_guesses, //number of guesses Remaining
+    guesses: "", //init guesses string
     wins_counter: 0, //number of player wins
     losses_counter: 0, //number of player losses
     rounds_counter: 0, //number of rounds played
+    turns_counter: 0, //init turns played
+    incorrect_counter: 0, //init incorrect guesses counter
     intro: false, //init intro screen
     start: false, //init game screen
     round: false, //init game round
@@ -49,26 +54,26 @@ function f_intro() {
 };
 
 function f_init_game() {
-    console.log("o_game.start: ", o_game.start);
     if (o_game.start) { //set initial game text
         $("#wins").html(o_game.wins_text + "<br />"); //display wins text
         $("#hidden_word").html(o_game.current_word_text + "<br />"); //display hidden word text
         $("#guesses_remaining").html(o_game.guesses_remaining_text + "<br />"); //display guesses remaining text
         $("#guesses_letters").html(o_game.guesses_text + "<br />"); //display letters guessed text
-
-        o_game.random_word = f_random_word(o_game.words);
-        o_game.random_letters = f_random_letters(o_game.random_word);
+        o_game.random_word = f_random_word(o_game.words); //get random word
+        o_game.random_letters = f_random_letters(o_game.random_word); //create array of letters from random word
+        o_game.correct_word = o_game.random_letters.join(""); //join array of random letters, create correct word to compare for win condition
         o_game.hidden_letters = f_hidden_letters(o_game.random_letters); //array of letters &/ spaces generated from random word
-        o_game.hidden_word = f_hidden_word(o_game.hidden_letters); 
+        o_game.hidden_word = o_game.hidden_letters.join("");; //create hidden word by joining hidden letters
 
-        $("#hidden_word").append(o_game.hidden_word);
+        $("#hidden_word").append(o_game.hidden_word); //add hidden word to game
 
-        $(document).on('keypress', function (event) {
+        $(document).on('keypress', function (event) { //on keypress
             var keypress = String.fromCharCode(event.keyCode); //get char from keypress
             if (/[a-zA-Z0-9]/.test(keypress)) {//if keypress A-Za-z0-9
-                o_game.round = true; //start turn
+                o_game.round = true; //start first round
+                o_game.turn = true; //start first turn
                 o_game.keypress_guess = keypress.toUpperCase() + " ";
-                f_round();
+                f_turn();
             };
         });
     };
@@ -76,11 +81,56 @@ function f_init_game() {
 
 function f_round() {
     if (o_game.round) {
-        o_game.turn = true;
-        if (o_game.turn) {
-            //check for matches
-            //check if wrong
+        $(document).on('keypress', function (event) {
+            var keypress = String.fromCharCode(event.keyCode); //get char from keypress
+            if (/[a-zA-Z0-9]/.test(keypress)) {//if keypress A-Za-z0-9
+                o_game.turn = true; //start first turn
+                o_game.keypress_guess = keypress.toUpperCase() + " ";
+                f_turn();
+            };
+        });
+
+        if (o_game.hidden_word === o_game.correct_word) { //if user finds all the letters, matches correct word
+            o_game.win = true; //user wins
+            o_game.round = false; //end round
+            o_game.wins_counter ++; //add 1 to wins counter
+            $("#wins").append(o_game.wins_counter); //display wins number
         };
+        
+        if (o_game.guesses_remaining == 0) {
+            o_game.lose = true;
+            o_game.round = false; //end round
+            o_game.losses_counter ++;
+        };
+    };
+
+    f_init_game(); //reset
+
+};
+
+function f_turn() {
+    if (o_game.turn) {
+        o_game.turns_counter++; //add 1 to turns counter
+        
+        for (i = 0; i < o_game.random_letters.length; i ++) { //check if keypress is match/incorrect
+            if (o_game.keypress_guess === o_game.random_letters[i]) { //if key equals one or more of the entries in random word array
+                o_game.match = true; //set match to true
+                o_game.hidden_letters[i] = o_game.keypress + " "; //replace matching letters to key, convert to uppercase    
+            } else { //else if key does not equal any entries in random word array
+                o_game.wrong = true; //set wrong to true
+            };
+        };
+
+        if (o_game.wrong) { //if incorrect guess
+            o_game.incorrect_counter ++; //add 1 to incorrect counter
+            o_game.guesses_remaining = o_game.guesses_remaining - o_game.incorrect_counter; //subtract 1 from # of guesses remaining
+            o_game.guesses_letters.push(o_game.keypress); //store char from keypress into guesses array 
+            o_game.guesses = o_game.guesses_letters.join(""); //join guesses string from guesses array
+            $("#guesses_remaining").append(o_game.guesses_remaining); //display # of guesses remaining
+            $("#guesses_letters").append(o_game.guesses); //display guessed letters
+        };
+
+        o_game.turn = false; //end turn
     };
 };
 
@@ -113,11 +163,6 @@ function f_hidden_letters(o_game_random_letters) {
     };
 
     return hidden_letters;
-};
-
-function f_hidden_word(o_game_hidden_letters) {
-    var hidden_word = o_game.hidden_letters.join("");
-    return hidden_word;
 };
 
 }); //end document ready
