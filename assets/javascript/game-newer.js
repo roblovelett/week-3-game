@@ -30,6 +30,8 @@ var o_game = { //game object for elements that change throughout
     game_over: false //init game over screen
 };
 
+f_intro(); //initial screen
+
 function f_intro() {
     o_game.intro = true; //set intro to true
     //set header text, intro text
@@ -47,7 +49,6 @@ function f_intro() {
 
 function f_init_game() {
     console.log("o_game.start: ", o_game.start);
-    debugger;
     if (o_game.start) { //set initial game text
         $("#wins").html(o_game.wins_text + "<br />"); //display wins text
         $("#hidden_word").html(o_game.current_word_text + "<br />"); //display hidden word text
@@ -116,9 +117,5 @@ function f_hidden_word(o_game_hidden_letters) {
     var hidden_word = o_game.hidden_letters.join("");
     return hidden_word;
 };
-
-f_intro(); //initial screen
-f_init_game(); //init game
-f_round(); //start round
 
 }); //end document ready
