@@ -8,11 +8,6 @@ $(document).ready(function() {
         subtitle_text: "Internet Cat", //set subtitle text
         intro_text: "Press Any Key to Get Started!" }; //set intro text
 
-    $("#header_title").html( //display o_start_textcreen.header_text
-        "<h1>" + o_start_screen.header_text + "</h1>" +
-        "<h2>" + o_start_screen.subtitle_text + "</h2>" );    
-    $("#intro").html(o_start_screen.intro_text); //display o_start_text.intro_text
-
     $(document).on('keypress', function (event) { //if user presses key
         b_intro = false; //end game intro
         b_game = true; //start game
@@ -29,7 +24,7 @@ $(document).ready(function() {
             var a_hidden_letters = []; //init hidden letters array
             var a_correct_letters = []; //init correct letters array
             var a_guesses = []; //init guesses array
-            var a_matches = []; //init matches array
+            //var a_matches = []; //init matches array
             var b_round = true; //init round
             var b_match = false; //init match
             var b_win = false; //init win

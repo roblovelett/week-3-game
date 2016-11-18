@@ -26,6 +26,6 @@
         </div>    
     </main>
     <footer></footer>
-    <script type ="text/javascript" src="assets/javascript/game.js"></script>
+    <script type ="text/javascript" src="assets/javascript/game-newer.js"></script>
   </body>
 </html>
