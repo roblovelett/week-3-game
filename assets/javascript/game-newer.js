@@ -42,14 +42,13 @@ function f_intro() {
         o_game.intro = false;
         o_game.start = true; //start game
         $("#intro").remove(); //remove press any key text
-        f_init_game(); //init game
     });
 };
 
 function f_init_game() {
-    console.log("o_game.start ", o_game.start);
+    console.log("o_game.start: ", o_game.start);
+    debugger;
     if (o_game.start) { //set initial game text
-        console.log("asfsafsafasfasfasfasfasfasfas");
         $("#wins").html(o_game.wins_text + "<br />"); //display wins text
         $("#hidden_word").html(o_game.current_word_text + "<br />"); //display hidden word text
         $("#guesses_remaining").html(o_game.guesses_remaining_text + "<br />"); //display guesses remaining text
@@ -66,8 +65,7 @@ function f_init_game() {
             var keypress = String.fromCharCode(event.keyCode); //get char from keypress
             if (/[a-zA-Z0-9]/.test(keypress)) {//if keypress A-Za-z0-9
                 o_game.round = true; //start turn
-                o_game.keypress_guess = key.toUpperCase() + " ";
-                f_round(); //start round
+                o_game.keypress_guess = keypress.toUpperCase() + " ";
             };
         });
     };
@@ -93,13 +91,11 @@ function f_random_letters(o_game_random_word) {
 
     for(i=0; i < random_letters.length; i++) {
         if (random_letters[i] === " ") {
-            random_letters[i] === "&nbsp;&nbsp;"
+            random_letters[i] = "&nbsp;&nbsp;"
         } else {
             random_letters[i] = random_letters[i].toUpperCase() + " ";
         };
     };
-
-    debugger;
 
     return random_letters;
 };
@@ -107,13 +103,11 @@ function f_random_letters(o_game_random_word) {
 function f_hidden_letters(o_game_random_letters) {
     var hidden_letters = [];
 
-    for (i = 0; i < o_game.random_letters.length; i++) {
-        while (o_game.random_letters[i] != "&nbsp;&nbsp;") {
+    for (i = 0; i < o_game.random_letters.length; i++) {         
+        if (o_game.random_letters[i] != "&nbsp;&nbsp;") {
             hidden_letters[i] = "_ ";
         };
     };
-
-    debugger;
 
     return hidden_letters;
 };
@@ -123,7 +117,8 @@ function f_hidden_word(o_game_hidden_letters) {
     return hidden_word;
 };
 
-
 f_intro(); //initial screen
+f_init_game(); //init game
+f_round(); //start round
 
 }); //end document ready
