@@ -66,7 +66,8 @@ function f_init_game() {
         o_game.hidden_word = o_game.hidden_letters.join("");; //create hidden word by joining hidden letters
 
         $("#hidden_word").append(o_game.hidden_word); //add hidden word to game
-
+        
+        $(document).off('keypress');
         $(document).on('keypress', function (event) { //on keypress
             var keypress = String.fromCharCode(event.keyCode); //get char from keypress
             if (/[a-zA-Z0-9]/.test(keypress)) {//if keypress A-Za-z0-9
@@ -81,6 +82,7 @@ function f_init_game() {
 
 function f_round() {
     if (o_game.round) {
+        $(document).off('keypress');
         $(document).on('keypress', function (event) {
             var keypress = String.fromCharCode(event.keyCode); //get char from keypress
             if (/[a-zA-Z0-9]/.test(keypress)) {//if keypress A-Za-z0-9
