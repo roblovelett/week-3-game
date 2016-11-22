@@ -22,11 +22,8 @@ $(document).ready(function() {
 
         if (o_game.flag.intro) { //if intro screen state
             
-            $("#intro").remove(); //remove press any key text
             o_game.flag.intro = false; //leave intro screen state
-            o_game.flag.init_game = true; //start initialize game state
-        
-        } else if (o_game.flag.init_game) { //if initialize game state
+            $("#intro").remove(); //remove press any key text
             
             //create default game text
             o_game.string.wins_text = "Wins"; //Wins
@@ -45,33 +42,22 @@ $(document).ready(function() {
                 turn: 0 //init turn to 0
             };
 
-            //create game flags
-            o_game.flag.match = false; //flag if there is a match
-            o_game.flag.wrong = false; //flag if there is a wrong guess
-
             //output default game text
             $("#wins").html(o_game.string.wins_text + "<br />"); //display wins text
             $("#hidden_word_label").html(o_game.string.current_word_text + "<br />"); //display hidden word text
             $("#guesses_remaining").html(o_game.string.guesses_remaining_text + "<br />"); //display guesses remaining text
             $("#guesses_letters_label").html(o_game.string.already_guessed_text + "<br />"); //display letters guessed text
 
-            o_game.flag.init_game = false; //leave initialize game state
-
-            o_game.string.key = String.fromCharCode(event.keyCode); //get char from keypress
-            
-            if (/[a-zA-Z0-9]/.test(o_game.string.key)) { //if keypress A-Za-z0-9
-                o_game.string.key = o_game.string.key.toUpperCase() + " "; //set to to be capitalized and have a space
-                f_init_round(); //initialize the first round
-                f_turn(); //play first turn
-            };
+            f_init_round(); //initialize the first round
             
         } else if (o_game.flag.init_round) {
+            
+            f_init_round(); //initialize the first round
             
             o_game.string.key = String.fromCharCode(event.keyCode); //get char from keypress            
 
             if (/[a-zA-Z0-9]/.test(o_game.string.key)) { //if keypress A-Za-z0-9
                 o_game.string.key = o_game.string.key.toUpperCase() + " "; //set to to be capitalized and have a space
-                f_init_round(); //initialize the first round
                 f_turn(); //play first turn
             };
 
@@ -141,6 +127,8 @@ $(document).ready(function() {
         
         if (o_game.flag.win || o_game.flag.lose) {
             o_game.flag.turn = false; //end turns state
+            o_game.flag.lose = false; //end lose state
+            o_game.flag.win = false; //end win state
             o_game.flag.init_round = true; //start init new round state
         };
 
@@ -157,19 +145,6 @@ $(document).ready(function() {
         o_game.counter.round ++; //add 1 to rounds counter
         o_game.counter.guesses = 8; //init guesses to 8
         o_game.string.guesses = ""; //init guesses string
-        o_game.flag.lose = false; //clear/init lose state
-        o_game.flag.win = false; //clear/init win state
-        
-        console.log(
-            "random word: ", o_game.string.random_word,
-            "random letters: ", o_game.array.random_letters,
-            "correct word: ", o_game.string.correct_word,
-            "hidden letters: ", o_game.array.hidden_letters,
-            "hidden word: ", o_game.string.hidden_word,
-            "round #: ", o_game.counter.round,
-            "guesses #: ", o_game.counter.guesses,
-            "guesses string: ", o_game.string.guesses
-        );
 
         //display hidden word
         $("#hidden_word").html(o_game.string.hidden_word);
