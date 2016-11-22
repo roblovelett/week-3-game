@@ -18,9 +18,13 @@
                 <div class="six columns">
                     <div id="intro"></div>
                     <div id="wins"></div>
+                    <div id="wins_counter"></div>
+                    <div id="hidden_word_label"></div>
                     <div id="hidden_word"></div>
                     <div id="guesses_remaining"></div>
-                    <div id="guesses_letters"></div>
+                    <div id="guesses_counter"></div>
+                    <div id="guesses_letters_label"></div>
+                    <div id-"guesses_letters"></div>
                 </div>
             </div>
         </div>    
